@@ -1,5 +1,7 @@
 const express = require("express");
+require("dotenv").config();
 const persons = require("./persons.json");
+const Person = require("./models/person");
 const morgan = require("morgan");
 
 const app = express();
@@ -17,7 +19,13 @@ app.use(express.static("build"));
 
 //======== GET ======
 app.get("/api/persons", (req, res) => {
-  res.status(200).json(data);
+  Person.find({})
+    .then((persons) => {
+      res.status(200).json(persons);
+    })
+    .catch((error) => {
+      res.status(404).json({ error: error.message });
+    });
 });
 
 app.get("/api/persons/:id", (req, res) => {
@@ -40,24 +48,24 @@ app.get("/api/info", (req, res) => {
 //======== POST ======
 app.post("/api/persons", (req, res) => {
   const { name, number } = req.body;
-  const person = data.find((p) => p.name === name);
-
-  if (!name) {
-    return res.status(400).json({ error: "name is missing" });
-  }
+  const existingRecord = data.find((p) => p.name === name);
 
   if (!number) {
     return res.status(400).json({ error: "number is missing" });
   }
 
-  if (person) {
+  if (existingRecord) {
     return res.status(404).json({ error: "name must be unique" });
   }
 
-  const newInfo = { name, number, id: getRandomId() };
-  data = data.concat(newInfo);
+  const person = new Person({ name, number });
 
-  res.status(200).json(newInfo);
+  person
+    .save()
+    .then((savePerson) => {
+      res.status(200).json(savePerson);
+    })
+    .catch((error) => res.status(400).json({ error: error.message }));
 });
 
 //======== DELETE ======
