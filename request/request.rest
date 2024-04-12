@@ -10,9 +10,20 @@ Content-Type: application/json
   "number": 123456
 }
 
-###
-GET http://localhost:3001/api/persons/1
 
 
 ###
-DELETE http://localhost:3001/api/persons/1
+PUT http://localhost:3001/api/persons/6617f6268b1973c66879bd24
+Content-Type: application/json
+
+{
+  "name": "John Jones",
+  "number": 123456
+}
+
+###
+GET http://localhost:3001/api/persons/6617f6548a1c9c97b7a023e5
+
+
+###
+DELETE http://localhost:3001/api/persons/6617f6268b1973c66879bd24
