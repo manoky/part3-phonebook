@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
-require("dotenv").config()
+const mongoose = require('mongoose')
+require('dotenv').config()
 
 const url = process.env.MONGO_URI
 
@@ -8,11 +8,11 @@ const connectToDB = () =>
     mongoose
       .connect(url)
       .then(() => {
-        console.log("connected to MongoDB")
+        console.log('connected to MongoDB')
         resolve()
       })
       .catch((error) => {
-        reject("error connecting to MongoDB:", error.message)
+        reject('error connecting to MongoDB:', error.message)
       })
   })
 

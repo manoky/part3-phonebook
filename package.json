@@ -7,9 +7,10 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "build-fe": "cd ../phonebook && npm run build && cp -r build ../part-3-backend/",
-    "build": "rm -rf build && npm run build-fe",
+    "build:ui": "rm -rf build && npm run build-fe",
     "commit": "git add . && git commit -m 'build ui' && git push",
-    "deploy": "npm run build && npm run commit && git push heroku main"
+    "deploy": "npm run build && npm run commit && git push heroku main",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,13 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.24.1",
+    "@eslint/eslintrc": "^3.0.2",
+    "@eslint/js": "^9.0.0",
+    "@stylistic/eslint-plugin-js": "^1.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5"
   },

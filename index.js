@@ -1,19 +1,19 @@
-const express = require("express")
-const morgan = require("morgan")
-const cors = require("cors")
-const connectToDB = require("./mongo")
-const Person = require("./models/person")
-const errorHandler = require("./middlewares/errorHandler")
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors')
+const connectToDB = require('./mongo')
+const Person = require('./models/person')
+const errorHandler = require('./middlewares/errorHandler')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static("build"))
-morgan.token("body", (req, res) => JSON.stringify(req.body))
-app.use(morgan(":method :url :status :response-time :body"))
+app.use(express.static('build'))
+morgan.token('body', (req) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :response-time :body'))
 
-app.get("/api/persons", async (req, res, next) => {
+app.get('/api/persons', async (req, res, next) => {
   try {
     const persons = await Person.find({})
     res.json(persons)
@@ -22,16 +22,16 @@ app.get("/api/persons", async (req, res, next) => {
   }
 })
 
-app.post("/api/persons", async (req, res, next) => {
+app.post('/api/persons', async (req, res, next) => {
   const { name, number } = req.body
 
   if (!name) {
-    res.status(400).json({ error: "Missing required field: Name" })
+    res.status(400).json({ error: 'Missing required field: Name' })
     return
   }
 
   if (!number) {
-    res.status(400).json({ error: "Missing required field: Number" })
+    res.status(400).json({ error: 'Missing required field: Number' })
     return
   }
 
@@ -49,7 +49,7 @@ app.post("/api/persons", async (req, res, next) => {
   }
 })
 
-app.get("/api/persons/:id", async (req, res, next) => {
+app.get('/api/persons/:id', async (req, res, next) => {
   try {
     const person = await Person.findById(req.params.id)
 
@@ -63,13 +63,13 @@ app.get("/api/persons/:id", async (req, res, next) => {
   }
 })
 
-app.put("/api/persons/:id", async (req, res, next) => {
+app.put('/api/persons/:id', async (req, res, next) => {
   try {
     const { name, number } = req.body
     const person = await Person.findByIdAndUpdate(
       req.params.id,
       { name, number },
-      { new: true, runValidators: true, context: "query" },
+      { new: true, runValidators: true, context: 'query' },
     )
 
     if (!person) {
@@ -82,7 +82,7 @@ app.put("/api/persons/:id", async (req, res, next) => {
   }
 })
 
-app.delete("/api/persons/:id", async (req, res, next) => {
+app.delete('/api/persons/:id', async (req, res, next) => {
   try {
     await Person.findByIdAndDelete(req.params.id)
     res.status(204).end()
@@ -91,8 +91,9 @@ app.delete("/api/persons/:id", async (req, res, next) => {
   }
 })
 
-app.get("/info", (req, res) => {
+app.get('/info', async (req, res) => {
   const date = new Date()
+  const persons = await Person.find({})
   res.send(
     `<div>
                 <p>Phonebook has info for ${persons.length} people</p>
@@ -103,7 +104,7 @@ app.get("/info", (req, res) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const { PORT } = process.env
 
 connectToDB()
   .then(() => {
